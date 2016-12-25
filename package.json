@@ -1,5 +1,5 @@
 {
-  "name": "machete",
+  "name": "@kizzlebot/machete",
   "description": "Server composer for hapi.js",
   "version": "4.0.0",
   "repository": {
