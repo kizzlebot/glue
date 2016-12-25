@@ -1,7 +1,7 @@
 {
   "name": "@kizzlebot/machete",
   "description": "Server composer for hapi.js",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/hapijs/glue"
