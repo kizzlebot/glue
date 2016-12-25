@@ -24,10 +24,6 @@ describe('machete module', () => {
     it('should exist and it should be a function', (done) => {
         expect(Machete).to.exist();
         expect(Machete).to.be.a.function();
-        expect(Machete.register).to.exist();
-        expect(Machete.register).to.be.a.function();
-        expect(Machete.register.attributes).to.exist();
-        expect(Machete.register.attributes).to.be.an.object();
         done();
     });
 

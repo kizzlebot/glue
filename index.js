@@ -7,10 +7,7 @@ const internals = module.exports = (params, attrs) => {
 
     const register = (server, options, next) => {
 
-        const params = Hoek.merge({}, params, {
-            server: server
-        });
-
+        params = Hoek.merge({}, params, { server: server });
 
         if (options.select){
             params.options = Hoek.merge({}, params.options, {select: options.select});
@@ -18,6 +15,7 @@ const internals = module.exports = (params, attrs) => {
 
         return Machete(params).compose(next);
     };
+
     register.attributes = attrs;
 
     return {
