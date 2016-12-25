@@ -16,3 +16,5 @@ config.json
 coverage.*
 lib-cov
 complexity.md
+yarn-error.log
+yarn.lock
