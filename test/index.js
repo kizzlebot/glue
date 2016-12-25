@@ -5,6 +5,7 @@ const Code = require('code');
 const Glue = require('..');
 const Lab = require('lab');
 const Hoek = require('hoek');
+const Hapi = require('hapi');
 
 
 // Declare internals
@@ -25,8 +26,7 @@ describe('compose()', () => {
     it('composes a server with an empty manifest', (done) => {
 
         const manifest = {};
-
-        Glue.compose(manifest, (err, server) => {
+        Glue.compose({manifest}, (err, server) => {
 
             expect(err).to.not.exist();
             expect(server.connections).length(1);
@@ -39,7 +39,7 @@ describe('compose()', () => {
         const manifest = {};
         let async = true;
 
-        Glue.compose(manifest, (err, server) => {
+        Glue.compose({manifest}, (err, server) => {
 
             expect(err).to.not.exist();
             async = false;
@@ -52,7 +52,7 @@ describe('compose()', () => {
 
         const manifest = {};
 
-        Glue.compose(manifest).then((server) => {
+        Glue.compose({manifest}).then((server) => {
 
             expect(server.connections).length(1);
             done();
@@ -64,7 +64,7 @@ describe('compose()', () => {
         const manifest = {};
         const options = {};
 
-        Glue.compose(manifest, options).then((server) => {
+        Glue.compose({manifest, options}).then((server) => {
 
             expect(server.connections).length(1);
             done();
@@ -81,7 +81,7 @@ describe('compose()', () => {
             ]
         };
 
-        Glue.compose(manifest).catch((err) => {
+        Glue.compose({manifest}).catch((err) => {
 
             expect(err).to.exist();
             expect(err.code).to.equal('MODULE_NOT_FOUND');
@@ -94,12 +94,11 @@ describe('compose()', () => {
         const manifest = {};
         const options = {
             preRegister: function (server, callback) {
-
                 callback({ error: 'failed' });
             }
         };
 
-        Glue.compose(manifest, options).then(null, (err) => {
+        Glue.compose({manifest, options}).then(null, (err) => {
 
             expect(err).to.exist();
             done();
@@ -114,7 +113,7 @@ describe('compose()', () => {
             }
         };
 
-        Glue.compose(manifest, (err, server) => {
+        Glue.compose({manifest}, (err, server) => {
 
             expect(err).to.not.exist();
             done();
@@ -129,7 +128,7 @@ describe('compose()', () => {
             }
         };
 
-        Glue.compose(manifest, (err, server) => {
+        Glue.compose({manifest}, (err, server) => {
 
             expect(err).to.not.exist();
             done();
@@ -146,7 +145,7 @@ describe('compose()', () => {
             }
         };
 
-        Glue.compose(manifest, (err, server) => {
+        Glue.compose({manifest}, (err, server) => {
 
             expect(err).to.not.exist();
             done();
@@ -163,8 +162,7 @@ describe('compose()', () => {
             }
         };
 
-        Glue.compose(manifest, (err, server) => {
-
+        Glue.compose({manifest}, (err, server) => {
             expect(err).to.not.exist();
             done();
         });
@@ -178,7 +176,7 @@ describe('compose()', () => {
             }
         };
 
-        Glue.compose(manifest, { relativeTo: __dirname + '/plugins' }, (err, server) => {
+        Glue.compose({manifest, options:{ relativeTo: __dirname + '/plugins' }}, (err, server) => {
 
             expect(err).to.not.exist();
             done();
@@ -198,7 +196,7 @@ describe('compose()', () => {
         };
         const clone = Hoek.clone(manifest);
 
-        Glue.compose(manifest, (err, server) => {
+        Glue.compose({manifest}, (err, server) => {
 
             expect(err).to.not.exist();
             expect(server.plugins.helloworld).to.exist();
@@ -215,7 +213,7 @@ describe('compose()', () => {
                 connections: []
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.connections).length(1);
@@ -231,7 +229,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.connections).length(1);
@@ -248,7 +246,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.connections).length(2);
@@ -265,7 +263,7 @@ describe('compose()', () => {
                 registrations: []
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.plugins).length(0);
@@ -283,7 +281,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.plugins.helloworld).to.exist();
@@ -305,7 +303,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.plugins.helloworld).to.exist();
@@ -329,7 +327,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.plugins.helloworld).to.exist();
@@ -350,7 +348,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.plugins.helloworld).to.exist();
@@ -372,7 +370,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.plugins.helloworld).to.exist();
@@ -381,7 +379,10 @@ describe('compose()', () => {
             });
         });
 
-        it('has a registration with register options and no plugin options', (done) => {
+        it('has a registration with register options and no plugin options w/ server provided', (done) => {
+
+            const server = new Hapi.Server();
+            server.connection({ port: 3000 });
 
             const manifest = {
                 registrations: [
@@ -394,11 +395,12 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
 
+            server.app.key = 'abcdefg';
+            Glue.compose({server, manifest}, (err, sserver) => {
                 expect(err).to.not.exist();
+                expect(server.app.key).to.equal(sserver.app.key);
                 server.inject('/test/plugin', (response) => {
-
                     expect(response.statusCode).to.equal(200);
                     done();
                 });
@@ -418,7 +420,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 server.inject('/test/plugin', (response) => {
@@ -454,7 +456,7 @@ describe('compose()', () => {
                 ]
             };
 
-            Glue.compose(manifest, (err, server) => {
+            Glue.compose({manifest}, (err, server) => {
 
                 expect(err).to.not.exist();
                 server.select('a').inject('/a/plugin', (responseA) => {
@@ -469,23 +471,60 @@ describe('compose()', () => {
             });
         });
 
+        it('should register plugin with label if passed in options', (done) => {
+
+            const manifest = {
+                registrations: [ {
+                    plugin: './plugins/route.js',
+                    options: {
+                        routes: { prefix: '/b/' }
+                    }
+                }]
+            };
+
+            const server = new Hapi.Server();
+            server.connection({ port: 8000, labels: 'api' });
+            server.app.key = 'abcdefg';
+
+
+            Glue.compose({
+                server: server,
+                manifest: manifest,
+                options:{
+                    relativeTo: `${__dirname}`,
+                    select: ['api']
+                }
+            }, (err, server) => {
+                expect(err).to.not.exist();
+                expect(err).to.not.exist();
+                server.select('api').inject('/b/plugin', (responseA) => {
+                    expect(responseA).to.exist();
+                    done();
+                });
+            });
+        });
+
         it('has a registration with the plugin resolved using options.relativeTo', (done) => {
 
             const manifest = {
-                registrations: [
-                    {
-                        plugin: './helloworld.js'
-                    }
-                ]
+                registrations: [ {
+                    plugin: './helloworld.js'
+                }]
             };
 
-            Glue.compose(manifest, { relativeTo: __dirname + '/plugins' }, (err, server) => {
+            Glue.compose({
+                manifest: manifest,
+                options:{
+                    relativeTo: `${__dirname}/plugins`
+                }
+            }, (err, server) => {
 
                 expect(err).to.not.exist();
                 expect(server.plugins.helloworld.hello).to.equal('world');
                 done();
             });
         });
+
     });
 
     it('composes a server with a preConnections handler', (done) => {
@@ -498,7 +537,7 @@ describe('compose()', () => {
             }
         };
 
-        Glue.compose(manifest, options, (err, server) => {
+        Glue.compose({manifest, options}, (err, server) => {
 
             expect(err).to.not.exist();
             done();
@@ -515,7 +554,7 @@ describe('compose()', () => {
             }
         };
 
-        Glue.compose(manifest, options, (err, server) => {
+        Glue.compose({manifest, options}, (err, server) => {
 
             expect(err).to.not.exist();
             done();
@@ -523,21 +562,19 @@ describe('compose()', () => {
     });
 
     it('errors on failed pre handler', (done) => {
-
         const manifest = {};
         const options = {
             preRegister: function (server, callback) {
-
                 callback({ error: 'failed' });
             }
         };
 
-        Glue.compose(manifest, options, (err, server) => {
-
+        Glue.compose({manifest, options}, (err, server) => {
             expect(err).to.exist();
             done();
         });
     });
+
 
     it('throws on bogus options.realativeTo path (server.cache)', (done) => {
 
@@ -548,8 +585,7 @@ describe('compose()', () => {
         };
 
         expect(() => {
-
-            Glue.compose(manifest, { relativeTo: __dirname + '/badpath' }, () => { });
+            Glue.compose({manifest, options:{ relativeTo: __dirname + '/badpath' }}, () => { });
         }).to.throw(/Cannot find module/);
         done();
     });
@@ -566,7 +602,7 @@ describe('compose()', () => {
 
         expect(() => {
 
-            Glue.compose(manifest, { relativeTo: __dirname + '/badpath' }, () => { });
+            Glue.compose({manifest, options:{ relativeTo: __dirname + '/badpath' }}, () => { });
         }).to.throw(/Cannot find module/);
         done();
     });
@@ -576,8 +612,7 @@ describe('compose()', () => {
         const manifest = {};
 
         expect(() => {
-
-            Glue.compose(manifest, 'hello', () => { });
+            Glue.compose({manifest, options:'hello'}, () => { });
         }).to.throw(/Invalid options/);
         done();
     });

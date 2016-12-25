@@ -29,6 +29,10 @@
     "lab": "11.x.x"
   },
   "scripts": {
+    "test-only": "NODE_ENV=test lab -C -S -v -a code -m 5000 -M 5000",
+    "test-coverage": "lab -r html -o ./coverage/index.html",
+    "test-lcov": "lab -t 90 -C -S -v -a code -c -r lcov -o ./coverage/lcov.info -r console -o stdout",
+    "test-run": "NODE_ENV=test lab -t 90 -C -S -v -a code -m 5000 -M 5000",
     "test": "node node_modules/lab/bin/lab -a code -t 100 -L",
     "test-cov-html": "node node_modules/lab/bin/lab -a code -r html -o coverage.html"
   },
