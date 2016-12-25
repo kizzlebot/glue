@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git://github.com/hapijs/glue"
   },
-  "main": "lib/index.js",
+  "main": "index.js",
   "keywords": [
     "server",
     "pack",

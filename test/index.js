@@ -2,7 +2,7 @@
 // Load modules
 
 const Code = require('code');
-const Glue = require('..');
+const Glue = require('../lib');
 const Lab = require('lab');
 const Hoek = require('hoek');
 const Hapi = require('hapi');
